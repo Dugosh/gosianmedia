@@ -6,7 +6,7 @@ import React from 'react';
  */
 export default function GMLogo({ width = 80, glow = false, className = '' }) {
   const height = width * (72 / 192);
-  const color = '#FF4D00';
+  const color = '#F25623'; /* Gosian Orange — exact from brand guidelines */
 
   return (
     <svg
