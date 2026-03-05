@@ -1,38 +1,86 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import PayrollView from './components/PayrollView'
 import StaffForm from './components/StaffForm'
-import StaffList from './components/StaffList'
 import PaymentSummary from './components/PaymentSummary'
+import { generateId } from './utils/calculations'
 
-const TABS = ['Add Staff', 'Staff List', 'Payment Summary']
+function loadStaff() {
+  try { return JSON.parse(localStorage.getItem('gm-staff') || '[]') } catch { return [] }
+}
+function loadPeriod() {
+  try { return localStorage.getItem('gm-period') || '' } catch { return '' }
+}
 
 export default function App() {
-  const [staffList, setStaffList] = useState([])
-  const [activeTab, setActiveTab] = useState(0)
-  const [period, setPeriod] = useState('')
+  const [staffList,    setStaffList]    = useState(loadStaff)
+  const [period,       setPeriod]       = useState(loadPeriod)
+  const [activeTab,    setActiveTab]    = useState(0)
+  const [editingStaff, setEditingStaff] = useState(null)
+  const [defaultTeam,  setDefaultTeam]  = useState(null)
 
-  function addStaff(staff) {
-    setStaffList(prev => [...prev, staff])
-    setActiveTab(1) // jump to staff list after adding
+  useEffect(() => { localStorage.setItem('gm-staff',  JSON.stringify(staffList)) }, [staffList])
+  useEffect(() => { localStorage.setItem('gm-period', period)                    }, [period])
+
+  function handleSave(data) {
+    if (editingStaff) {
+      setStaffList(prev => prev.map(s => s.id === editingStaff.id ? { ...data, id: editingStaff.id } : s))
+    } else {
+      setStaffList(prev => [...prev, { ...data, id: generateId(), paidStatus: false }])
+    }
+    setEditingStaff(null)
+    setDefaultTeam(null)
+    setActiveTab(0)
   }
 
-  function removeStaff(id) {
+  function handleEdit(staff) {
+    setEditingStaff(staff)
+    setDefaultTeam(null)
+    setActiveTab(1)
+  }
+
+  function handleAddToTeam(teamKey) {
+    setEditingStaff(null)
+    setDefaultTeam(teamKey)
+    setActiveTab(1)
+  }
+
+  function handleRemove(id) {
     setStaffList(prev => prev.filter(s => s.id !== id))
   }
 
+  function handleTogglePaid(id) {
+    setStaffList(prev => prev.map(s => s.id === id ? { ...s, paidStatus: !s.paidStatus } : s))
+  }
+
+  function handleCancelEdit() {
+    setEditingStaff(null)
+    setDefaultTeam(null)
+    setActiveTab(0)
+  }
+
+  const periodLabel = period
+    ? new Date(period + '-02').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : ''
+
+  const tabLabels = [
+    'Payroll',
+    editingStaff ? 'Edit Staff' : 'Add Staff',
+    'Summary',
+  ]
+
   return (
     <div className="app">
-      {/* Header */}
       <header className="app-header no-print">
         <div className="header-inner">
           <div className="brand">
-            <span className="brand-icon">💰</span>
-            <div>
+            <div className="brand-logo">GM</div>
+            <div className="brand-text">
               <h1>Gosian Media</h1>
-              <p>Staff Payment Calculator</p>
+              <p>Payroll Manager</p>
             </div>
           </div>
           <div className="period-field">
-            <label>Payment Period</label>
+            <label>Pay Period</label>
             <input
               type="month"
               value={period}
@@ -41,16 +89,18 @@ export default function App() {
           </div>
         </div>
 
-        {/* Tabs */}
         <nav className="tabs">
-          {TABS.map((tab, i) => (
+          {tabLabels.map((tab, i) => (
             <button
-              key={tab}
+              key={i}
               className={`tab ${activeTab === i ? 'tab-active' : ''}`}
-              onClick={() => setActiveTab(i)}
+              onClick={() => {
+                if (i !== 1) { setEditingStaff(null); setDefaultTeam(null) }
+                setActiveTab(i)
+              }}
             >
               {tab}
-              {i === 1 && staffList.length > 0 && (
+              {i === 0 && staffList.length > 0 && (
                 <span className="tab-badge">{staffList.length}</span>
               )}
             </button>
@@ -58,22 +108,36 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Content */}
       <main className="main-content">
-        {activeTab === 0 && <StaffForm onAdd={addStaff} />}
+        {activeTab === 0 && (
+          <PayrollView
+            staffList={staffList}
+            period={periodLabel}
+            onEdit={handleEdit}
+            onRemove={handleRemove}
+            onTogglePaid={handleTogglePaid}
+            onAddToTeam={handleAddToTeam}
+          />
+        )}
         {activeTab === 1 && (
-          <StaffList staffList={staffList} onRemove={removeStaff} />
+          <StaffForm
+            key={editingStaff?.id ?? 'new'}
+            initialData={editingStaff}
+            defaultTeam={defaultTeam}
+            onSave={handleSave}
+            onCancel={handleCancelEdit}
+          />
         )}
         {activeTab === 2 && (
           <PaymentSummary
             staffList={staffList}
-            period={period ? new Date(period + '-01').toLocaleDateString('en-NG', { month: 'long', year: 'numeric' }) : ''}
+            period={periodLabel}
           />
         )}
       </main>
 
       <footer className="app-footer no-print">
-        <p>Gosian Media &copy; {new Date().getFullYear()} — Staff Payment Calculator</p>
+        <p>Gosian Media &copy; {new Date().getFullYear()} — Internal Payroll Tool</p>
       </footer>
     </div>
   )
