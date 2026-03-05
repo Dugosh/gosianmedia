@@ -304,6 +304,8 @@ body {
   font-weight: 700;
 }
 
+.topbar-logo { display: block; flex-shrink: 0; opacity: .92; }
+
 .pay-date-badge {
   font-family: var(--font-heading);
   font-size: .65rem; font-weight: 700; color: var(--orange);
@@ -635,6 +637,82 @@ body {
   transition: border-color .15s, color .15s;
 }
 .btn-add-member:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ─── Override / Bonus panel ─────────────────────────── */
+.override-toggle {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--border-l); background: transparent;
+  color: var(--text-m); font-size: .7rem; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center;
+  justify-content: center; transition: all .13s; flex-shrink: 0;
+  font-family: var(--font-body);
+}
+.override-toggle:hover { border-color: var(--orange); color: var(--orange); }
+.override-toggle-active { border-color: #eab308; color: #eab308; background: rgba(234,179,8,.1); }
+
+.override-row td { padding: 0; background: rgba(242,86,35,.03); border-bottom: 1px solid var(--border); }
+.override-panel {
+  display: flex; align-items: flex-start; gap: 24px;
+  padding: 10px 14px; flex-wrap: wrap;
+}
+.override-field {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.override-field label {
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-body);
+  font-size: .67rem; font-weight: 600; color: var(--text-m);
+  white-space: nowrap;
+}
+.override-field .input-with-prefix input {
+  width: 100%;
+  background: var(--input-bg); border: 1px solid var(--border);
+  border-radius: var(--r-s); padding: 5px 8px 5px 22px;
+  font-size: .8rem; font-family: var(--font-body); color: var(--text); outline: none;
+}
+.override-field .input-with-prefix input:focus { border-color: var(--orange); }
+.override-hint { font-size: .6rem; color: var(--text-m); font-weight: 300; font-style: italic; }
+.override-clear { font-size: .65rem; color: var(--red); padding: 2px 6px; }
+.pay-manual-badge { color: #eab308; font-style: italic; }
+
+/* ─── Comp type selector in modal ────────────────────── */
+.comp-type-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+.comp-type-option {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: var(--r-s); background: transparent;
+  cursor: pointer; text-align: left; transition: border-color .12s, background .12s;
+}
+.comp-type-option:hover { border-color: var(--border-l); background: var(--card-h); }
+.comp-type-selected {
+  border-color: var(--orange) !important;
+  background: var(--orange-dim) !important;
+}
+.comp-type-label {
+  font-family: var(--font-heading);
+  font-size: .78rem; font-weight: 700; color: var(--text);
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.comp-type-selected .comp-type-label { color: var(--orange); }
+.comp-type-desc { font-family: var(--font-body); font-size: .68rem; font-weight: 300; color: var(--text-m); }
+
+.form-group-inline {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.form-group-inline label { white-space: nowrap; }
+.form-group-section-label {
+  font-family: var(--font-heading);
+  font-size: .6rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--orange); margin: 8px 0 4px;
+}
+.manual-pay-notice {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: rgba(242,86,35,.08); border: 1px solid rgba(242,86,35,.2);
+  border-radius: var(--r-s); padding: 10px 12px; margin-top: 4px;
+  font-family: var(--font-body); font-size: .72rem; font-weight: 300;
+  color: var(--text-2); line-height: 1.5;
+}
+.manual-pay-notice svg { flex-shrink: 0; margin-top: 1px; color: var(--orange); }
 
 /* ═══════════════════════════════════════════════════════
    MANAGE STAFF

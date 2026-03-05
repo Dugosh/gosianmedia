@@ -1,46 +1,50 @@
 import React from 'react';
 
 /**
- * Gosian Media GM logomark — SVG recreation of the geometric G + three-bar M.
- * The G is an angular C-frame with a mid-height bar; the M is three italic parallelogram bars.
+ * Gosian Media — accurate GM logomark recreation.
+ * G: Bold C-frame with thick arms + horizontal crossbar shelf.
+ * M: Three diagonal parallelogram stripes (forward-slash orientation).
+ * Color: Gosian Orange #F25623
  */
-export default function GMLogo({ width = 80, glow = false, className = '' }) {
-  const height = width * (72 / 192);
-  const color = '#F25623'; /* Gosian Orange — exact from brand guidelines */
+export default function GMLogo({ width = 80, className = '' }) {
+  const height = width * (100 / 262);
 
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 192 72"
+      viewBox="0 0 262 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={glow ? { filter: 'drop-shadow(0 0 10px rgba(255,77,0,0.65)) drop-shadow(0 0 22px rgba(255,77,0,0.35))' } : {}}
     >
-      {/* ── G: angular C frame + mid bar ─────────────────────── */}
-      {/* C frame using evenodd — outer rect minus inner cutout = C shape */}
-      <path
-        fill={color}
-        fillRule="evenodd"
-        d={[
-          // Outer rectangle (G bounding box)
-          'M 0 0 L 74 0 L 74 72 L 0 72 Z',
-          // Inner cutout — creates the C opening (right + center)
-          'M 14 14 L 74 14 L 74 58 L 14 58 Z',
-        ].join(' ')}
-      />
-      {/* Horizontal bar — partially closes the C to form the G */}
-      <rect x="38" y="28" width="36" height="16" fill={color} />
+      <g fill="#F25623">
+        {/* ── G shape ───────────────────────────────────────
+            Built from overlapping filled rects — same color merges seamlessly.
+            Left wall + top arm + bottom arm = the C-frame.
+            Crossbar shelf fills the lower portion of the right opening. */}
 
-      {/* ── M: three slanted bars ─────────────────────────────── */}
-      {/* Each bar is a parallelogram leaning ~20° rightward */}
-      {/* Bar 1 */}
-      <polygon points="86,72 100,72 120,0 106,0" fill={color} />
-      {/* Bar 2 */}
-      <polygon points="110,72 124,72 144,0 130,0" fill={color} />
-      {/* Bar 3 */}
-      <polygon points="134,72 148,72 168,0 154,0" fill={color} />
+        {/* Left spine */}
+        <rect x="0" y="0" width="26" height="100" rx="13" ry="13"/>
+        {/* Top arm */}
+        <rect x="0" y="0" width="100" height="26" rx="13" ry="13"/>
+        {/* Bottom arm */}
+        <rect x="0" y="74" width="100" height="26" rx="13" ry="13"/>
+        {/* Crossbar / shelf (lower half of the opening, extends inward from right) */}
+        <rect x="54" y="56" width="46" height="18" rx="0" ry="0"/>
+
+        {/* ── M shape: three diagonal bars ───────────────────
+            Each bar is a parallelogram leaning ~65° from horizontal.
+            Lean = 46px over 100px height. Bar width = 22px, gap = 14px.
+            Points: (x,100) (x+22,100) (x+68,0) (x+46,0) */}
+
+        {/* Bar 1 */}
+        <polygon points="118,100 140,100 186,0 164,0"/>
+        {/* Bar 2 */}
+        <polygon points="154,100 176,100 222,0 200,0"/>
+        {/* Bar 3 */}
+        <polygon points="190,100 212,100 258,0 236,0"/>
+      </g>
     </svg>
   );
 }

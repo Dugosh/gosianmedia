@@ -128,18 +128,18 @@ export const DEFAULT_STAFF = [
   { id: id(), name: 'Elijah', team: 'Admin', role: 'cofounder', wiseHandle: '',
     comp: {
       type: 'sliding_scale',
-      // Sliding scale on SP monthly revenue
+      // Sliding scale on SP Gross Revenue (platform fees already accounted for)
       tiers: [
         { maxRevenue: 150000, rate: 21.25 },
         { maxRevenue: 200000, rate: 20 },
         { maxRevenue: 250000, rate: 19 },
         { maxRevenue: Infinity, rate: 18 },
       ],
-      // Additional: 5% of OF/Fansly gross for outreach work
+      // Additional: 5% of OF + Fansly gross combined for outreach work
       ofFanslyGrossRate: 5,
     }},
   { id: id(), name: 'Kevin', team: 'Admin', role: 'model_scout', wiseHandle: '',
-    comp: { type: 'model_scout', commissionRate: 10 } },
+    comp: { type: 'manual' } },
   { id: id(), name: 'Casey', team: 'Admin', role: 'internal_admin', wiseHandle: '',
     comp: { type: 'internal_admin', spGrossRate: 2.5, fanslyGrossRate: 5 } },
 

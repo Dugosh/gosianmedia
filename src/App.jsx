@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import GMLogo from './components/GMLogo';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import TeamView from './components/TeamView';
@@ -218,6 +219,7 @@ export default function App() {
             <span className="pay-date-badge">
               Pay Date: {month}/{currentPeriod?.payDate}
             </span>
+            <GMLogo width={62} className="topbar-logo" />
           </div>
         </header>
 
